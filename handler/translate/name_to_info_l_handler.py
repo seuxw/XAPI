@@ -11,8 +11,8 @@ from auth import jwtauth
 from database import db_pool
 from handler import BaseHandler
 from log import LogBase
-logger = LogBase().get_logger("NameToInfoL")
 from route import app
+logger = LogBase().get_logger("NameToInfoL")
 
 
 @app.route(r'/translate/nameToInfoL')

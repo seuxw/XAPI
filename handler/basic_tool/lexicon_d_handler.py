@@ -4,10 +4,8 @@
 from asyncio import events
 import traceback
 
-import tornado.web
-
 from auth import jwtauth
-from database import db_pool, SqlSet
+from database import SqlSet
 from handler import BaseHandler
 from log import LogBase
 from route import app

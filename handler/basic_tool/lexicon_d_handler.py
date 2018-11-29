@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
 # 此接口为词库相关接口
 
-from route import app
+from asyncio import events
 import traceback
 
-import pymysql
-from tornado import gen
 import tornado.web
 
-from asyncio import events
 from auth import jwtauth
 from database import db_pool, SqlSet
 from handler import BaseHandler
 from log import LogBase
+from route import app
 logger = LogBase().get_logger("LexiconD")
 
 
@@ -21,14 +19,6 @@ logger = LogBase().get_logger("LexiconD")
 class LexiconDHandler(BaseHandler):
     """词库模块."""
     INFO = {"author": "zzccchen", "version": "2.0"}
-
-    SELECT_SQL = """
-        SELECT
-            `value`, `secret`, `remark`, `create_datetime`
-        FROM
-            testsmallwei.dictionary
-        WHERE
-            `key` = %s;"""
 
     async def get(self, *args, **kwargs):
         """查询词库中对应的回复."""

@@ -49,20 +49,31 @@ class SqlSet():
         }
         return await SqlSet.get(sql_dict)
 
-    # @staticmethod
-    # async def get_student_info(key, value):
-    #     """查询词库中对应的回复.
-    #     Args:
-    #         key: 查询的键名（基于模块变量名，与表无关）
-    #         value: 查询的键值
-    #     Returns:
-    #         value, secret, remark, create_datetime
-    #     """
-    #     GET_DICTIONARY = """
-    #         SELECT
-    #             `value`, `secret`, `remark`, `create_datetime`
-    #         FROM
-    #             %s.dictionary
-    #         WHERE
-    #             `key` = %s;"""
-    #     return await SqlSet.get(GET_DICTIONARY, key)
+    @staticmethod
+    async def get_student_info(names, key, value):
+        """查询词库中对应的回复.
+
+        Args:
+            names: 需要返回的列名(list)
+            key: 查询基于的键名（基于模块变量名，与表无关）
+            value: 查询基于的键值
+        Returns:
+            由传入参数 names 决定，最多包括：
+            `name`, `stuid`, `cardno`, `qq`, `dept`, `major`, `grade`
+        """
+        names_dict = {
+            "name": "`name`",
+            "stuid": "`stuNo` AS `stuid`",
+            "cardno": "`cardNo` AS `cardno`",
+            "qq": "`QQ` AS `qq`",
+            "dept": "dept",
+            "major": "major",
+            "grade": "grade"
+        }
+        sql_dict = {
+            "names": ", ".join([names_dict[key] for key in names]),
+            "table": "student_info",
+            "key": "`{}`".format(key),
+            "value": value
+        }
+        return await SqlSet.get(sql_dict)

@@ -4,7 +4,6 @@
 from asyncio import events
 
 import pymysql
-from tornado import gen
 
 from database import db_pool
 
@@ -21,34 +20,49 @@ class SqlSet():
     @staticmethod
     async def get(sql_dict, fetch="one"):
         """查询数据库."""
+        async def fetchone():
+            await cursor.execute(sql, (sql_dict["value"]))
+            return cursor.fetchone()
+
+        async def fetchall(*sql_args):
+            await cursor.execute(sql, (sql_args))
+            return cursor.fetchall()
+
         async with await db_pool.Connection() as conn:
             async with conn.cursor(pymysql.cursors.DictCursor) as cursor:
                 if fetch == "one":
                     sql = SqlSet.GET_ONE.format(
                         sql_dict["names"], SqlSet.DB, sql_dict["table"],
                         sql_dict["key"])
-                    await cursor.execute(sql, (sql_dict["value"]))
-                    return cursor.fetchone()
+                    return await fetchone()
                 elif fetch == "count":
                     sql = SqlSet.GET_COUNT.format(
                         SqlSet.DB, sql_dict["table"],
                         sql_dict["key"], sql_dict["exp"])
-                    await cursor.execute(sql, (sql_dict["value"]))
-                    return cursor.fetchone()
+                    return await fetchone()
                 elif fetch == "limit":
                     sql = SqlSet.GET_LIMIT.format(
                         sql_dict["names"], SqlSet.DB, sql_dict["table"],
                         sql_dict["key"], sql_dict["exp"])
-                    await cursor.execute(sql, (sql_dict["value"],
-                                               sql_dict["limit1"], sql_dict["limit2"]))
-                    return cursor.fetchall()
+                    return await fetchall(sql_dict["value"],
+                                          sql_dict["limit1"], sql_dict["limit2"])
 
     @staticmethod
     def names_join(names_dict, names):
+        def as_format(names_dict, key):
+            return "{0} AS `{1}`".format(names_dict[key], key)
+
         if names == ["*"]:
-            return ", ".join([value for value in names_dict.values()])
+            names_list = [as_format(names_dict, key)
+                          for key in names_dict.keys()
+                          if key != "_others_"]
+            names_list.append(names_dict["_others_"])
+            return ", ".join(names_list)
         else:
-            return ", ".join([names_dict.get(key) for key in names])
+            return ", ".join([as_format(names_dict, key)
+                              if key in names_dict.keys()
+                              else "`{}`".format(key)
+                              for key in names])
 
     @staticmethod
     def page2limit(page, pagesize):
@@ -71,14 +85,11 @@ class SqlSet():
         }
         return await SqlSet.get(sql_dict)
 
-    STUDENT_INFO_NAME_DICT = {
-        "name": "`name`",
-        "stuid": "`stuNo` AS `stuid`",
-        "cardno": "`cardNo` AS `cardno`",
-        "qq": "`QQ` AS `qq`",
-        "dept": "dept",
-        "major": "major",
-        "grade": "grade"
+    STUDENT_INFO_RENAME_DICT = {
+        "stuid": "`stuNo`",
+        "cardno": "`cardNo`",
+        "qq": "`QQ`",
+        "_others_": "`name`, `dept`, `major`, `grade`"
     }
 
     @staticmethod
@@ -94,7 +105,7 @@ class SqlSet():
             `name`, `stuid`, `cardno`, `qq`, `dept`, `major`, `grade`
         """
         sql_dict = {
-            "names": SqlSet.names_join(SqlSet.STUDENT_INFO_NAME_DICT, names),
+            "names": SqlSet.names_join(SqlSet.STUDENT_INFO_RENAME_DICT, names),
             "table": "student_info",
             "key": "`{}`".format(key),
             "value": value
@@ -115,7 +126,7 @@ class SqlSet():
             和 {"count": 符合查询条件总个数统计}
         """
         sql_dict = {
-            "names": SqlSet.names_join(SqlSet.STUDENT_INFO_NAME_DICT, names),
+            "names": SqlSet.names_join(SqlSet.STUDENT_INFO_RENAME_DICT, names),
             "table": "student_info",
             "key": "`{}`".format(key),
             "exp": "LIKE",

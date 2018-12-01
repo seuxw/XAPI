@@ -2,6 +2,8 @@
 # 数据库指令集
 
 from asyncio import events
+import datetime
+import decimal
 
 import pymysql
 
@@ -152,3 +154,67 @@ class SqlSet():
             "value": value
         }
         return await SqlSet.get(sql_dict)
+
+    @staticmethod
+    async def get_paocao(value):
+        """查询词库中对应的回复.
+
+        Args: 
+            value: 对应 `cardno`
+        Returns: 
+            `count_paocao`, `modify_date`
+        """
+        async def update_paocao_use():
+            """更新跑操调用次数，并返回."""
+            INSERT_SQL = """
+                INSERT INTO {0}.{1}
+                    (`use_date`, `use_count`)
+                VALUES
+                    (%s, 1)
+                ON DUPLICATE KEY
+                UPDATE
+                    `use_count` = `use_count` + 1;"""
+            SELECT_SQL = """
+                SELECT
+                    `use_count`
+                FROM
+                    {0}.{1}
+                WHERE
+                    `use_date` = %s;"""
+            INSERT_SQL = INSERT_SQL.format(SqlSet.DB, "s_paocao_use")
+            SELECT_SQL = SELECT_SQL.format(SqlSet.DB, "s_paocao_use")
+            async with await db_pool.Connection() as conn:
+                async with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+                    today = str(datetime.date.today())
+                    await cursor.execute(INSERT_SQL, (today))
+                    await conn.commit()
+                    await cursor.execute(SELECT_SQL, (today))
+                    return cursor.fetchone()["use_count"]
+
+        async def get_paocao_rank():
+            SELECT_SQL = """
+                SELECT
+                    100 - COUNT(1) / 8007 * 100 AS `rank`
+                FROM
+                    {0}.{1}
+                WHERE
+                    (`card_no` LIKE '21316%%'
+                        OR `card_no` LIKE '21317%%')
+                        AND `count_paocao` >= %s;"""
+            SELECT_SQL = SELECT_SQL.format(SqlSet.DB, sql_dict["table"])
+            async with await db_pool.Connection() as conn:
+                async with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+                    await cursor.execute(SELECT_SQL, (get_paocao["count_paocao"]))
+                    rank = cursor.fetchone()["rank"]
+            rank = str(decimal.Decimal(str(rank)).quantize(
+                decimal.Decimal('0.000')))
+            return rank
+
+        sql_dict = {
+            "names": "`count_paocao`, `modify_date`",
+            "table": "s_paocao",
+            "key": "`card_no`",
+            "value": value
+        }
+        get_paocao = await SqlSet.get(sql_dict)
+        return await update_paocao_use(), get_paocao, await get_paocao_rank()

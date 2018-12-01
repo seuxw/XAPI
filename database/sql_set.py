@@ -135,3 +135,20 @@ class SqlSet():
             "limit2": pagesize
         }
         return await SqlSet.get(sql_dict, "limit"), await SqlSet.get(sql_dict, "count")
+
+    @staticmethod
+    async def get_course_table_all(value):
+        """查询词库中对应的回复.
+
+        Args: 
+            value: 对应 `stuid`
+        Returns: 
+            `id`, `course0`, ..., `course14`, `stuNo`
+        """
+        sql_dict = {
+            "names": "*",
+            "table": "coursetable",
+            "key": "`stuNo`",
+            "value": value
+        }
+        return await SqlSet.get(sql_dict)

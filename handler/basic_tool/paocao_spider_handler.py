@@ -1,30 +1,23 @@
-# coding=utf8
-# 此接口为学生信息查询接口
+# -*- coding: utf-8 -*-
+# 此接口为跑操爬虫相关接口
 
-import datetime
-import decimal
+from asyncio import events
 import traceback
 
-import pymysql
-from tornado import gen
-import tornado.web
-
-from auth import jwtauth
-from database import db_pool
+from auth import jwtauth, COMMON
+from database import SqlSet
 from handler import BaseHandler
 from log import LogBase
-logger = LogBase().get_logger("Paocao")
 from route import app
+logger = LogBase().get_logger("PaocaoSpider")
 
 
-@app.route(r'/stu/stuInfo/paocaoD')
-@jwtauth
-class PaocaoDHandler(BaseHandler):
-    """获取最后一次打卡的次数和打卡时间."""
-    INFO = {"author": "TBCCC&zzccchen", "version": "2.0"}
+@app.route(r'/basicTool/paocaoSpider')
+@jwtauth(user=COMMON)
+class PaocaoSpiderHandler(BaseHandler):
+    INFO = {"author": "zzccchen", "version": "2.0"}
 
-    @gen.coroutine
-    def update_paocao_use(self):
+    async def update_paocao_use(self):
         """更新跑操调用次数，并返回."""
 
         INSERT_SQL = """

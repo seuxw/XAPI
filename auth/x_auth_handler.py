@@ -19,10 +19,11 @@ class XAuthHandler(BaseHandler):
 
     def post(self, *args, **kwargs):
         """获取token"""
-        if self.get_argument("pass") == "pass*" and self.get_argument("word") == "*word":
+        if isinstance(self.get_argument("tk"), str):
             token = jwt.encode(
                 payload={
                     'iss': "xapi.seuxw.cn",
+                    'aud': self.get_argument("tk"),
                     'iat': datetime.datetime.utcnow(),
                     'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=self.TIMEOUT)
                 },
@@ -30,6 +31,7 @@ class XAuthHandler(BaseHandler):
                 algorithm='HS256'
             )
             response = {'token': token.decode('ascii')}
+            print(response)
             return self.write_json_f(response)
         else:
             return self.write_error_f(4012)

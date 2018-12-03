@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
 
-from .auth import jwtauth
+from .auth import jwtauth, COMMON, VIP, ADMIN, MASTER
 from .x_auth_handler import XAuthHandler
-from .paocao_sessionid_handler import PaocaoSessionidHandler

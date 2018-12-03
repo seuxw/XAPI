@@ -26,41 +26,59 @@ def is_valid_header(parts):
     return True if parts[0] == AUTHORIZATION_METHOD and len(parts) == 2 else False
 
 
-def jwtauth(handler_class):
-    """JWT 身份验证."""
-    def wrap_execute(handler_execute):
-        def require_auth(handler, kwargs):
+# 用户类别 0-普通 10-VIP 20-管理 30-超级管理
+COMMON = 0
+VIP = 10
+ADMIN = 20
+MASTER = 30
 
-            auth = handler.request.headers.get(AUTHORIZATION_HEADER)
-            if not auth:
-                handler.INFO = INFO
-                return handler.write_error_f(4012)
 
-            auth_parts = auth.split()
-            if not is_valid_header(auth_parts):
-                handler.INFO = INFO
-                return handler.write_error_f(4011)
+def jwtauth(user=ADMIN):
+    """JWT 身份验证.
 
-            token = auth_parts[1]
-            try:
-                jwt.decode(
-                    token,
-                    SECRET_KEY,
-                    options=JWT_OPTIONS,
-                    algorithms='HS256'
-                )
-            except Exception as err:
-                handler.INFO = INFO
-                return handler.write_error_f(4011)
-            return True
+    Args:
+        user: 用户类别：0 - COMMON - 普通，
+                      10 - VIP - VIP，
+                      20 - ADMIN - 管理，
+                      30 - MASTER - 超级管理
+    """
+    def decorator(handler_class):
+        def wrap_execute(handler_execute):
+            def require_auth(handler, kwargs):
 
-        def _execute(self, transforms, *args, **kwargs):
-            try:
-                require_auth(self, kwargs)
-            except Exception:
-                return False
-            return handler_execute(self, transforms, *args, **kwargs)
-        return _execute
+                auth = handler.request.headers.get(AUTHORIZATION_HEADER)
+                if not auth:
+                    handler.INFO = INFO
+                    return handler.write_error_f(4012)
 
-    handler_class._execute = wrap_execute(handler_class._execute)
-    return handler_class
+                auth_parts = auth.split()
+                if not is_valid_header(auth_parts):
+                    handler.INFO = INFO
+                    return handler.write_error_f(4011)
+
+                token = auth_parts[1]
+                try:
+                    jwt.decode(
+                        token,
+                        SECRET_KEY,
+                        options=JWT_OPTIONS,
+                        algorithms='HS256'
+                    )
+                except Exception as err:
+                    handler.INFO = INFO
+                    return handler.write_error_f(4011)
+                # TODO:
+                print(user)
+                return True
+
+            def _execute(self, transforms, *args, **kwargs):
+                try:
+                    require_auth(self, kwargs)
+                except Exception:
+                    return False
+                return handler_execute(self, transforms, *args, **kwargs)
+            return _execute
+
+        handler_class._execute = wrap_execute(handler_class._execute)
+        return handler_class
+    return decorator

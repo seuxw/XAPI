@@ -6,7 +6,7 @@ import datetime
 import jwt
 import tornado.web
 
-from .auth import SECRET_KEY
+from .auth import auth
 from handler import BaseHandler
 from route import app
 
@@ -15,7 +15,6 @@ from route import app
 class XAuthHandler(BaseHandler):
     """token发放模块."""
     INFO = {"author": "zzccchen", "version": "2.0"}
-    TIMEOUT = 15552000  # 180 天
 
     def post(self, *args, **kwargs):
         """获取token"""
@@ -25,10 +24,10 @@ class XAuthHandler(BaseHandler):
                     'iss': "xapi.seuxw.cn",
                     'aud': self.get_argument("tk"),
                     'iat': datetime.datetime.utcnow(),
-                    'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=self.TIMEOUT)
+                    'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=auth.TIMEOUT)
                 },
-                key=SECRET_KEY,
-                algorithm='HS256'
+                key=auth.SECRET_KEY,
+                algorithm=auth.ALGORITHMS
             )
             response = {'token': token.decode('ascii')}
             print(response)

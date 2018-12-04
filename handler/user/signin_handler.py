@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # 此接口为用户签到相关接口
 
+from route import app
 import datetime
 import requests
 import time
@@ -11,16 +12,15 @@ import pymysql
 from tornado import gen
 import tornado.web
 
-from auth import jwtauth
+from auth import auth
 from database import db_pool
 from handler import BaseHandler
 from log import LogBase
 logger = LogBase().get_logger("Signin")
-from route import app
 
 
 @app.route(r'/user/signin/signinD')
-@jwtauth
+@auth.admin
 class SigninHandler(BaseHandler):
     """签到模块.
 
@@ -139,11 +139,11 @@ class SigninHandler(BaseHandler):
         with (yield db_pool.Connection()) as conn:
             with conn.cursor(pymysql.cursors.DictCursor) as cursor:
                 yield cursor.execute(INSERT_SQL, (user["last_date"], qq,
-                                                      added_score, user["last_time"]))
+                                                  added_score, user["last_time"]))
                 yield conn.commit()
                 yield cursor.execute(UPDATE_SQL, (user["total_score"], user["total_signin"],
-                                                      user["ctn_signin"], user["last_date"],
-                                                      user["last_time"], qq))
+                                                  user["ctn_signin"], user["last_date"],
+                                                  user["last_time"], qq))
                 yield conn.commit()
         raise gen.Return(user)
 
@@ -195,7 +195,7 @@ class SigninHandler(BaseHandler):
 
 
 @app.route(r'/user/signin/signinScoreD')
-@jwtauth
+@auth.admin
 class SigninScoreDHandler(BaseHandler):
     """
     查询用户签到分数等相关信息。

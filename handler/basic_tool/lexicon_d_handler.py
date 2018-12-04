@@ -4,7 +4,7 @@
 from asyncio import events
 import traceback
 
-from auth import jwtauth
+from auth import auth
 from database import SqlSet
 from handler import BaseHandler
 from log import LogBase
@@ -13,7 +13,7 @@ logger = LogBase().get_logger("LexiconD")
 
 
 @app.route(r'/basicTool/lexiconD')
-@jwtauth
+@auth.admin
 class LexiconDHandler(BaseHandler):
     """词库模块."""
     INFO = {"author": "zzccchen", "version": "2.0"}

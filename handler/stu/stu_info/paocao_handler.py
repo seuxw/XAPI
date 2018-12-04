@@ -4,7 +4,7 @@
 from asyncio import events
 import traceback
 
-from auth import jwtauth
+from auth import auth
 from database import SqlSet
 from handler import BaseHandler
 from log import LogBase
@@ -13,7 +13,7 @@ logger = LogBase().get_logger("Paocao")
 
 
 @app.route(r'/stu/stuInfo/paocaoD')
-@jwtauth
+@auth.admin
 class PaocaoDHandler(BaseHandler):
     """获取最后一次打卡的次数和打卡时间."""
     INFO = {"author": "zzccchen", "version": "2.0"}

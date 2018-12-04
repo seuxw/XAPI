@@ -4,7 +4,7 @@
 from asyncio import events
 import traceback
 
-from auth import jwtauth, COMMON
+from auth import auth
 from database import SqlSet
 from handler import BaseHandler
 from log import LogBase
@@ -13,7 +13,7 @@ logger = LogBase().get_logger("PaocaoSpider")
 
 
 @app.route(r'/basicTool/paocaoSpider')
-@jwtauth(user=COMMON)
+@auth.common
 class PaocaoSpiderHandler(BaseHandler):
     INFO = {"author": "zzccchen", "version": "2.0"}
 

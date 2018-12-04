@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 # 此接口为用户信息相关接口
 
+from route import app
 import traceback
 
 import pymysql
 from tornado import gen
 import tornado.web
 
-from auth import jwtauth
+from auth import auth
 from database import db_pool
 from handler import BaseHandler
 from log import LogBase
 logger = LogBase().get_logger("UserInfo")
-from route import app
 
 
 @app.route(r'/user/userInfo/nicknameD')
-@jwtauth
+@auth.admin
 class NicknameDHandler(BaseHandler):
     """查询用户昵称."""
     INFO = {"author": "zzccchen", "version": "2.0"}
@@ -53,7 +53,7 @@ class NicknameDHandler(BaseHandler):
 
 
 @app.route(r'/user/userInfo/alterNicknameD')
-@jwtauth
+@auth.admin
 class AlterNicknameDHandler(BaseHandler):
     """修改用户昵称."""
     INFO = {"author": "zzccchen", "version": "2.0"}
@@ -93,7 +93,7 @@ class AlterNicknameDHandler(BaseHandler):
 
 
 @app.route(r'/user/userInfo/registD')
-@jwtauth
+@auth.admin
 class RegistDHandler(BaseHandler):
     """用户注册."""
     INFO = {"author": "zzccchen", "version": "2.0"}

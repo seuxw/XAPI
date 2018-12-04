@@ -4,7 +4,7 @@
 from asyncio import events
 import traceback
 
-from auth import jwtauth
+from auth import auth
 from database import SqlSet
 from handler import BaseHandler
 from log import LogBase
@@ -13,7 +13,7 @@ logger = LogBase().get_logger("StuidToCardnoD")
 
 
 @app.route(r'/translate/stuidToCardnoD')
-@jwtauth
+@auth.admin
 class StuidToCardnoDHandler(BaseHandler):
     """
     学号转一卡通 handler

@@ -4,17 +4,14 @@
 # import os
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
-import tornado.web
 
-from auth import jwtauth, XAuthHandler
-from handler import *
+from handler import BaseHandler
 from log import LogBase
-logger = LogBase().get_logger("Main")
 from route import app
+logger = LogBase().get_logger("Main")
 
 
 @app.route(r'/')
-@jwtauth
 class HelloHandler(BaseHandler):
     """hello world模块."""
     INFO = {"author": "zzccchen", "version": "2.0"}

@@ -4,7 +4,7 @@
 from asyncio import events
 import traceback
 
-from auth import jwtauth
+from auth import auth
 from database import SqlSet
 from handler import BaseHandler
 from log import LogBase
@@ -13,7 +13,7 @@ logger = LogBase().get_logger("NameToInfoL")
 
 
 @app.route(r'/translate/nameToInfoL')
-@jwtauth
+@auth.admin
 class NameToInfoLHandler(BaseHandler):
     """名字转身份信息 handler."""
     INFO = {"author": "zzccchen", "version": "2.0"}

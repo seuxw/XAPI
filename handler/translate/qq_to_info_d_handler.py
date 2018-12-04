@@ -4,7 +4,7 @@
 from asyncio import events
 import traceback
 
-from auth import jwtauth
+from auth import auth
 from database import SqlSet
 from handler import BaseHandler
 from log import LogBase
@@ -13,7 +13,7 @@ logger = LogBase().get_logger("QqToInfoD")
 
 
 @app.route(r'/translate/qqToInfoD')
-@jwtauth
+@auth.admin
 class QqToInfoDHandler(BaseHandler):
     """
     QQ转身份信息 handler

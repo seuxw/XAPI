@@ -4,7 +4,6 @@
 import datetime
 
 import jwt
-import tornado.web
 
 from .auth import auth
 from handler import BaseHandler

@@ -35,12 +35,12 @@ class JwtAuth(object):
             'verify_iss': True,
             'verify_aud': True
         }
+        self.TIMEOUT = 15552000  # 180 天
         # 用户类别 0-普通 10-VIP 20-管理 30-超级管理
         self.common = self._jwt(0)
         self.vip = self._jwt(10)
         self.admin = self._jwt(20)
         self.master = self._jwt(30)
-        self.TIMEOUT = 15552000  # 180 天
 
     def _is_valid_header(self, parts):
         """header 验证."""

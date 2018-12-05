@@ -20,6 +20,8 @@ HTTP状态码->HTTP Status Code （包含自定义）
 | 4011   | Invalid Header Authorization          |
 | 4012   | Missing Authorization                 |
 | 4013   | Wrong Authorization Level             |
+| 4014   | Wrong Client Id                       |
+| 4015   | Missing Open Id                       |
 | 404    | Not Found                             |
 | 4041   | Not Found This Cardno In MySQL Server |
 | 4042   | This QQ Not Bound                     |

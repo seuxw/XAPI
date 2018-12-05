@@ -19,7 +19,7 @@ class JwtAuth(object):
         'verify_nbf': False,
         'verify_iat': True,
         'verify_iss': True,
-        'verify_aud': True
+        'verify_aud': False
     }
     TIMEOUT = 15552000  # 180 天
 
@@ -38,6 +38,7 @@ class JwtAuth(object):
         self.AUTHORIZATION_METHOD = conf["AUTH_CFG"]["AUTHORIZATION_METHOD"]
         self.SECRET_KEY = conf["AUTH_CFG"]["SECRET_KEY"]
         self.ALGORITHMS = conf["AUTH_CFG"]["ALGORITHMS"]
+        self.CLIENT_ID = conf["AUTH_CFG"]["CLIENT_ID"]
         # 用户类别 0-普通 10-VIP 20-管理 30-超级管理
         self.common = self._jwt(0)
         self.vip = self._jwt(10)
@@ -76,8 +77,9 @@ class JwtAuth(object):
                             options=self.JWT_OPTIONS,
                             algorithms=self.ALGORITHMS)
                         user_tk = payload.get("user", 0)
-                        if user_tk != user:
+                        if user_tk < user:
                             return handler.write_error_f(4013)
+
                     except Exception as err:
                         handler.INFO = self.INFO
                         return handler.write_error_f(4011)

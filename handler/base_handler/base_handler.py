@@ -171,7 +171,11 @@ class BaseHandler(tornado.web.RequestHandler):
                     '2': {"code": 4012,
                           "message": "Missing Authorization"},
                     '3': {"code": 4013,
-                          "message": "Wrong Authorization Level"}
+                          "message": "Wrong Authorization Level"},
+                    '4': {"code": 4014,
+                          "message": "Wrong Client Id"},
+                    '5': {"code": 4015,
+                          "message": "Missing Open Id"},
                 }
             },
             "404": {
@@ -209,7 +213,8 @@ class BaseHandler(tornado.web.RequestHandler):
         self.set_status(int(status_code_b))
         self.rsp["message"] = response.get(status_code_b, {}).get(
             "message", "Undefined Error")
-        self.rsp["errors"] = response.get(status_code_b, {}).get("errors", {}).get(status_code_s, {"code": status_code,
-                                                                                                   "message": "Undefined Error"})
+        self.rsp["errors"] = response.get(status_code_b, {}).get(
+            "errors", {}).get(status_code_s, {"code": status_code,
+                                              "message": "Undefined Error"})
 
         self._write_json()

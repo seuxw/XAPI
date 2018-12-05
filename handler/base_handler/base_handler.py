@@ -186,6 +186,9 @@ class BaseHandler(tornado.web.RequestHandler):
             elif status_code_s == "2":
                 self.rsp["errors"] = {"code": 4012,
                                       "message": "Missing Authorization"}
+            elif status_code_s == "3":
+                self.rsp["errors"] = {"code": 4013,
+                                      "message": "Wrong Authorization Level"}
             else:
                 self.rsp["errors"] = {"code": status_code,
                                       "message": "Undefined Error"}

@@ -70,11 +70,14 @@ class JwtAuth(object):
 
                     token = auth_parts[1]
                     try:
-                        jwt.decode(
+                        payload = jwt.decode(
                             token,
                             self.SECRET_KEY,
                             options=self.JWT_OPTIONS,
                             algorithms=self.ALGORITHMS)
+                        user_tk = payload.get("user", 0)
+                        if user_tk != user:
+                            return handler.write_error_f(4013)
                     except Exception as err:
                         handler.INFO = self.INFO
                         return handler.write_error_f(4011)

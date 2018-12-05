@@ -91,6 +91,7 @@ class SqlSet():
         "stuid": "`stuNo`",
         "cardno": "`cardNo`",
         "qq": "`QQ`",
+        # 此处出于安全考虑不添加 `openid`
         "_others_": "`name`, `dept`, `major`, `grade`"
     }
 
@@ -104,7 +105,7 @@ class SqlSet():
             value: 查询基于的键值
         Returns:
             由传入参数 names 决定，最多包括：
-            `name`, `stuid`, `cardno`, `qq`, `dept`, `major`, `grade`
+            `name`, `stuid`, `cardno`, `qq`, `dept`, `major`, `grade`, `openid`
         """
         sql_dict = {
             "names": SqlSet.names_join(SqlSet.STUDENT_INFO_RENAME_DICT, names),
@@ -124,7 +125,7 @@ class SqlSet():
             value: 查询基于的键值
         Returns:
             由传入参数 names 决定，最多包括：
-            `name`, `stuid`, `cardno`, `qq`, `dept`, `major`, `grade`
+            `name`, `stuid`, `cardno`, `qq`, `dept`, `major`, `grade`, `openid`
             和 {"count": 符合查询条件总个数统计}
         """
         sql_dict = {
@@ -137,6 +138,21 @@ class SqlSet():
             "limit2": pagesize
         }
         return await SqlSet.get(sql_dict, "limit"), await SqlSet.get(sql_dict, "count")
+
+    @staticmethod
+    async def update_student_openid(cardno, openid):
+        """更改学生信息表中 openid."""
+        UPDATE_SQL = """
+            UPDATE {0}.student_info 
+            SET 
+                `openid` = %s
+            WHERE
+                `cardno` = %s;"""
+        UPDATE_SQL = UPDATE_SQL.format(SqlSet.DB)
+        async with await db_pool.Connection() as conn:
+            async with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+                await cursor.execute(UPDATE_SQL, (openid, cardno))
+                await conn.commit()
 
     @staticmethod
     async def get_course_table_all(value):

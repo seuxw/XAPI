@@ -30,6 +30,7 @@ HTTP状态码->HTTP Status Code （包含自定义）
 | 4045   | This Cardno Not Bound QQ              |
 | 4046   | This QQ Not Registered                |
 | 4047   | Not Found This Key In Word Dictionary |
+| 4048   | Not Found This Openid In MySQL Server |
 | 500    | Internal Server Error                 |
 | 5001   | Unknown Server Error                  |
 | 5002   | MySQL Server Error                    |

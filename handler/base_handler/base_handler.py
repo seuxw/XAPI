@@ -194,7 +194,9 @@ class BaseHandler(tornado.web.RequestHandler):
                     '6':  {"code": 4046,
                            "message": "This QQ Not Registered"},
                     '7': {"code": 4047,
-                          "message": "Not Found This Key In Word Dictionary"}
+                          "message": "Not Found This Key In Word Dictionary"},
+                    '8': {"code": 4048,
+                          "message": "Not Found This Openid In MySQL Server"}
                 }
             },
             "405": {

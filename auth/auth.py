@@ -76,16 +76,13 @@ class JwtAuth(object):
                             self.SECRET_KEY,
                             options=self.JWT_OPTIONS,
                             algorithms=self.ALGORITHMS)
-                        user_tk = payload.get("user", 0)
-                        if user_tk < user:
+                        user_tk = payload.get("usr", 0)
+                        if int(user_tk) < user:
                             return handler.write_error_f(4013)
-
+                        return True
                     except Exception as err:
                         handler.INFO = self.INFO
                         return handler.write_error_f(4011)
-                    # TODO:
-                    print(user)
-                    return True
 
                 def _execute(self, transforms, *args, **kwargs):
                     try:

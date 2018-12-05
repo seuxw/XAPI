@@ -8,8 +8,8 @@ ENUM_USER_TYPE_ADMIN    = 20
 ENUM_USER_TYPE_MASTER   = 30
 
 ENUM_DIC_USER_TYPE = dict(
-    common  = 0,
-    vip     = 10,
-    admin   = 20,
-    master  = 30,
+    common  = ENUM_USER_TYPE_COMMON,
+    vip     = ENUM_USER_TYPE_VIP,
+    admin   = ENUM_USER_TYPE_ADMIN,
+    master  = ENUM_USER_TYPE_MASTER,
 )

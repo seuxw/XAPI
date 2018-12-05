@@ -2,9 +2,9 @@
 # JWT 身份验证模块
 
 import configparser
-
 import jwt
 
+from utils.utilconst.user import ENUM_DIC_USER_TYPE
 
 class JwtAuth(object):
     """JWT 身份验证类."""
@@ -39,11 +39,11 @@ class JwtAuth(object):
         self.SECRET_KEY = conf["AUTH_CFG"]["SECRET_KEY"]
         self.ALGORITHMS = conf["AUTH_CFG"]["ALGORITHMS"]
         self.CLIENT_ID = conf["AUTH_CFG"]["CLIENT_ID"]
-        # 用户类别 0-普通 10-VIP 20-管理 30-超级管理
-        self.common = self._jwt(0)
-        self.vip = self._jwt(10)
-        self.admin = self._jwt(20)
-        self.master = self._jwt(30)
+
+        self.common = self._jwt(ENUM_DIC_USER_TYPE["common"])
+        self.vip = self._jwt(ENUM_DIC_USER_TYPE["vip"])
+        self.admin = self._jwt(ENUM_DIC_USER_TYPE["admin"])
+        self.master = self._jwt(ENUM_DIC_USER_TYPE["master"])
 
     def _is_valid_header(self, parts):
         """header 验证."""

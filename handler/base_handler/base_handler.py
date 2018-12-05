@@ -135,116 +135,81 @@ class BaseHandler(tornado.web.RequestHandler):
 
         self.rsp["code"] = status_code_b
 
-        if status_code_b == "400":
-            self.set_status(400)
-            self.rsp["message"] = "Bad Request"
-
-            if status_code_s == "1":
-                self.rsp["errors"] = {"code": 4001,
-                                      "message": "Wrong Type Of Cardno"}
-            elif status_code_s == "2":
-                self.rsp["errors"] = {"code": 4002,
-                                      "message": "Wrong Type Of QQ"}
-            elif status_code_s == "3":
-                self.rsp["errors"] = {"code": 4003,
-                                      "message": "Wrong Type Of Stuid"}
-            elif status_code_s == "4":
-                self.rsp["errors"] = {"code": 4004,
-                                      "message": "This QQ Has Registered"}
-            elif status_code_s == "5":
-                self.rsp["errors"] = {"code": 4005,
-                                      "message": "Wrong Type Of Page"}
-            elif status_code_s == "6":
-                self.rsp["errors"] = {"code": 4006,
-                                      "message": "Wrong Type Of Pagesize"}
-            elif status_code_s == "7":
-                self.rsp["errors"] = {"code": 4007,
-                                      "message": "Signin Before Sun Rise"}
-            elif status_code_s == "8":
-                self.rsp["errors"] = {"code": 4008,
-                                      "message": "Has signed"}
-            elif status_code_s == "9":
-                self.rsp["errors"] = {"code": 4009,
-                                      "message": "Wrong Type Of Week"}
-            elif status_code_s == "10":
-                self.rsp["errors"] = {"code": 40010,
-                                      "message": "Wrong Type Of Nickname"}
-            elif status_code_s == "11":
-                self.rsp["errors"] = {"code": 40011,
-                                      "message": "Wrong Type Of Name"}
-            else:
-                self.rsp["errors"] = {"code": status_code,
-                                      "message": "Undefined Error"}
-
-        elif status_code_b == "401":
-            self.set_status(401)
-            self.rsp["message"] = "Unauthorized"
-
-            if status_code_s == "1":
-                self.rsp["errors"] = {"code": 4011,
-                                      "message": "Invalid Header Authorization"}
-            elif status_code_s == "2":
-                self.rsp["errors"] = {"code": 4012,
-                                      "message": "Missing Authorization"}
-            elif status_code_s == "3":
-                self.rsp["errors"] = {"code": 4013,
-                                      "message": "Wrong Authorization Level"}
-            else:
-                self.rsp["errors"] = {"code": status_code,
-                                      "message": "Undefined Error"}
-
-        elif status_code_b == "404":
-            self.set_status(404)
-            self.rsp["message"] = "Not Found"
-
-            if status_code_s == "1":
-                self.rsp["errors"] = {"code": 4041,
-                                      "message": "Not Found This Cardno In MySQL Server"}
-            elif status_code_s == "2":
-                self.rsp["errors"] = {"code": 4042,
-                                      "message": "This QQ Not Bound"}
-            elif status_code_s == "3":
-                self.rsp["errors"] = {"code": 4043,
-                                      "message": "Not Found This Stuid In MySQL Server"}
-            elif status_code_s == "4":
-                self.rsp["errors"] = {"code": 4044,
-                                      "message": "Not Found This Name In MySQL Server"}
-            elif status_code_s == "5":
-                self.rsp["errors"] = {"code": 4045,
-                                      "message": "This Cardno Not Bound QQ"}
-            elif status_code_s == "6":
-                self.rsp["errors"] = {"code": 4046,
-                                      "message": "This QQ Not Registered"}
-            elif status_code_s == "7":
-                self.rsp["errors"] = {"code": 4047,
-                                      "message": "Not Found This Key In Word Dictionary"}
-            else:
-                self.rsp["errors"] = {"code": status_code,
-                                      "message": "Undefined Error"}
-
-        elif status_code_b == "405":
-            self.set_status(405)
-            self.rsp["message"] = "Method Not Allowed"
-            self.rsp["errors"] = {"code": 405,
-                                  "message": self._reason}
-
-        elif status_code_b == "500":
-            self.set_status(500)
-            self.rsp["message"] = "Internal Server Error"
-
-            if status_code_s == "1":
-                self.rsp["errors"] = {"code": 5001,
-                                      "message": "Unknown Server Error"}
-            elif status_code_s == "2":
-                self.rsp["errors"] = {"code": 5002,
-                                      "message": "MySQL Server Error"}
-            else:
-                self.rsp["errors"] = {"code": status_code,
-                                      "message": "Undefined Error"}
-
-        else:
-            self.rsp["message"] = "Undefined Error"
-            self.rsp["errors"] = {"code": status_code,
-                                  "message": "Undefined Error"}
+        response = {
+            "400": {
+                "message": "Bad Request",
+                "errors": {
+                    '1': {"code": 4001,
+                          "message": "Wrong Type Of Cardno"},
+                    '2': {"code": 4002,
+                          "message": "Wrong Type Of QQ"},
+                    '3': {"code": 4003,
+                          "message": "Wrong Type Of Stuid"},
+                    '4': {"code": 4004,
+                          "message": "This QQ Has Registered"},
+                    '5': {"code": 4005,
+                          "message": "Wrong Type Of Page"},
+                    '6': {"code": 4006,
+                          "message": "Wrong Type Of Pagesize"},
+                    '7': {"code": 4007,
+                          "message": "Signin Before Sun Rise"},
+                    '8': {"code": 4008,
+                          "message": "Has signed"},
+                    '9': {"code": 4009,
+                          "message": "Wrong Type Of Week"},
+                    '10': {"code": 40010,
+                           "message": "Wrong Type Of Nickname"},
+                    '11': {"code": 40011,
+                           "message": "Wrong Type Of Name"}
+                }
+            },
+            "401": {
+                "message": "Unauthorized",
+                "errors": {
+                    '1': {"code": 4011,
+                          "message": "Invalid Header Authorization"},
+                    '2': {"code": 4012,
+                          "message": "Missing Authorization"},
+                    '3': {"code": 4013,
+                          "message": "Wrong Authorization Level"}
+                }
+            },
+            "404": {
+                "message": "Not Found",
+                "errors": {
+                    '1': {"code": 4041,
+                          "message": "Not Found This Cardno In MySQL Server"},
+                    '2': {"code": 4042,
+                          "message": "This QQ Not Bound"},
+                    '3': {"code": 4043,
+                          "message": "Not Found This Stuid In MySQL Server"},
+                    '4': {"code": 4044,
+                          "message": "Not Found This Name In MySQL Server"},
+                    '5': {"code": 4045,
+                          "message": "This Cardno Not Bound QQ"},
+                    '6':  {"code": 4046,
+                           "message": "This QQ Not Registered"},
+                    '7': {"code": 4047,
+                          "message": "Not Found This Key In Word Dictionary"}
+                }
+            },
+            "405": {
+                "message": "Method Not Allowed"
+            },
+            "500": {
+                "message": "Internal Server Error",
+                "errors": {
+                    '1': {"code": 5001,
+                          "message": "Unknown Server Error"},
+                    '2': {"code": 5002,
+                          "message": "MySQL Server Error"}
+                }
+            }
+        }
+        self.set_status(int(status_code_b))
+        self.rsp["message"] = response.get(status_code_b, {}).get(
+            "message", "Undefined Error")
+        self.rsp["errors"] = response.get(status_code_b, {}).get("errors", {}).get(status_code_s, {"code": status_code,
+                                                                                                   "message": "Undefined Error"})
 
         self._write_json()

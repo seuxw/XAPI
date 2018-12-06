@@ -19,21 +19,21 @@ def spider_paocao_cookie():
         若获取成功，则返回JSID字符串，
         若获取失败，则返回空字符串
     """
-    logger = logging.getLogger("sele.py")
-    logger.info("Start sele")
+    logger = logging.getLogger("spider_paocao_cookie.py")
+    logger.info("Start spider paocao cookie")
 
     try:
         chrome_options = Options()
-        # chrome_options.add_argument('--headless')
-        # chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--disable-gpu')
 
         driver = webdriver.Chrome(chrome_options=chrome_options)
         driver.set_page_load_timeout(60)
         driver.set_script_timeout(60)
 
         # 测试时使用URL
-        driver.get("http://ids1.seu.edu.cn/amserver/UI/Login")
-        # driver.get("http://zccx.seu.edu.cn")
+        # driver.get("http://ids1.seu.edu.cn/amserver/UI/Login")
+        driver.get("http://zccx.seu.edu.cn")
         driver.set_window_size(1200, 800)
 
         def get_code():
@@ -89,16 +89,20 @@ def spider_paocao_cookie():
                 return jsid
             except Exception:
                 time.sleep(7)
+                alert = driver.switch_to.alert
+                alert.accept()
                 driver.refresh()
-                get_jsid()
+                return None
 
         jsid = get_jsid()
+        while (not jsid):
+            jsid = get_jsid()
         driver.quit()
-        logger.info("Success sele")
+        logger.info("Success get paocao cookie")
         return jsid
 
     except Exception as e:
-        logger.exception("A error happened in running sele.py")
+        logger.exception("A error happened in running spider_paocao_cookie.py")
         driver.quit()
         return ""
 

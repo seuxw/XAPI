@@ -80,17 +80,37 @@ def create_database_cfg():
 
 
 def create_paocao_cfg():
-    """创建 auth 配置文件."""
+    """创建跑操爬虫配置文件."""
     print("\nStart create spider paocao config file")
     CONFIG_FILE = "./utils/spider_paocao_cookie/paocao.cfg"
     conf = configparser.ConfigParser()
     conf.add_section('CARD_INFO')
 
     cardno = input("? 一卡通号: ")
-    conf.set('CARD_INFO', 'CARDNO', cardno)
+    conf.set('CARD_INFO', 'cardno', cardno)
 
     cardpswd = getpass.getpass("* 一卡通密码: ")
-    conf.set('CARD_INFO', 'CARDPSWD', cardpswd)
+    conf.set('CARD_INFO', 'cardpswd', cardpswd)
+
+    conf.write(open(CONFIG_FILE, 'w'))
+    print("Finish create spider paocao config file\n")
+
+
+def create_redis_cfg():
+    """创建 Redis 配置文件."""
+    print("\nStart create Redis config file")
+    CONFIG_FILE = "./database/redis.cfg"
+    conf = configparser.ConfigParser()
+    conf.add_section('REDIS_INFO')
+
+    host = default_input("? Host (localhost)", "localhost")
+    conf.set('REDIS_INFO', 'host', host)
+
+    port = default_input("? Port (6379)", "6379")
+    conf.set('REDIS_INFO', 'port', port)
+
+    db = input("? Db: ")
+    conf.set('REDIS_INFO', 'db', db)
 
     conf.write(open(CONFIG_FILE, 'w'))
     print("Finish create spider paocao config file\n")

@@ -20,7 +20,9 @@ _Xiaowei API Module (XAPI) is a web api module based on tornado framework._
 
 ## 环境及依赖
 
-你需要先安装 MySQL，其他 Python 依赖包可通过以下命令安装：
+你需要先安装 MySQL、Redis、tesseract-ocr
+
+其他 Python 依赖包可通过以下命令安装：
 
 ```bash
 pip3 install -r requirements.txt
@@ -35,6 +37,7 @@ pip3 install pymysql
 pip3 install tormysql
 pip3 install Pillow
 pip3 install pytesseract
+pip3 install redis
 ```
 
 _开发环境： Ubuntu 18.04 LTS_

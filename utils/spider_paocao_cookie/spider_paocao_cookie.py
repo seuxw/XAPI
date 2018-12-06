@@ -2,24 +2,23 @@
 
 import configparser
 import logging
-import os
 import time
 
 from PIL import Image, ImageFilter
 import pytesseract
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
+from database import redis_session
 
 
-def spider_paocao_cookie():
+def get_paocao_cookie():
     """身份验证的 JSID 获取.
 
     Return:
         若获取成功，则返回JSID字符串，
         若获取失败，则返回空字符串
     """
-    logger = logging.getLogger("spider_paocao_cookie.py")
     logger.info("Start spider paocao cookie")
 
     try:
@@ -105,6 +104,15 @@ def spider_paocao_cookie():
         logger.exception("A error happened in running spider_paocao_cookie.py")
         driver.quit()
         return ""
+
+
+def spider_paocao_cookie():
+    logger = logging.getLogger("spider_paocao_cookie.py")
+    while(True):
+        jsid = get_paocao_cookie()
+        if jsid:
+            redis_session.set("jsid", jsid)
+        time.sleep(10800)
 
 
 if __name__ == "__main__":

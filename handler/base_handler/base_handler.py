@@ -208,7 +208,9 @@ class BaseHandler(tornado.web.RequestHandler):
                     '1': {"code": 5001,
                           "message": "Unknown Server Error"},
                     '2': {"code": 5002,
-                          "message": "MySQL Server Error"}
+                          "message": "MySQL Server Error"},
+                    '3': {"code": 5003,
+                          "message": "Redis Server Error"}
                 }
             }
         }

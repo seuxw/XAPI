@@ -26,6 +26,7 @@ class RedisSession(object):
         self.host = conf["REDIS_INFO"]["host"]
         self.port = conf["REDIS_INFO"]["port"]
         self.db = conf["REDIS_INFO"]["db"]
+        self.jsid = "jsid"
 
     def connect_redis(self):
         """连接到 Redis 数据库.

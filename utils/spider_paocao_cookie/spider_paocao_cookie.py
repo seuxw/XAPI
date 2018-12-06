@@ -111,7 +111,7 @@ def spider_paocao_cookie():
     while(True):
         jsid = get_paocao_cookie()
         if jsid:
-            redis_session.set("jsid", jsid)
+            redis_session.set(redis_session.jsid, jsid)
         time.sleep(10800)
 
 

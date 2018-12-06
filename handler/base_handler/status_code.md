@@ -34,3 +34,4 @@ HTTP状态码->HTTP Status Code （包含自定义）
 | 500    | Internal Server Error                 |
 | 5001   | Unknown Server Error                  |
 | 5002   | MySQL Server Error                    |
+| 5003   | Redis Server Error                    |

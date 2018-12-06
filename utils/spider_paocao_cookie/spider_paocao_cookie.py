@@ -12,7 +12,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
-def sele():
+def spider_paocao_cookie():
     """身份验证的 JSID 获取.
 
     Return:
@@ -46,7 +46,7 @@ def sele():
             top = int(element.location['y'])
             right = int(element.location['x'] + element.size['width'])
             bottom = int(element.location['y'] + element.size['height'])
-            # TODO： Fix
+
             im = Image.open('utils/spider_paocao_cookie/screen.png')
             im = im.crop((left, top, right, bottom))
             w, h = im.size
@@ -68,8 +68,8 @@ def sele():
 
             conf = configparser.ConfigParser()
             conf.read("utils/spider_paocao_cookie/paocao.cfg")
-            elem1.send_keys(conf["CARD_INFO"]["CARDNO"])
-            elem2.send_keys(conf["CARD_INFO"]["CARDPSWD"])
+            elem1.send_keys(conf["CARD_INFO"]["cardno"])
+            elem2.send_keys(conf["CARD_INFO"]["cardpswd"])
             elem3.send_keys(code)
 
             login = driver.find_element_by_css_selector(
@@ -104,4 +104,4 @@ def sele():
 
 
 if __name__ == "__main__":
-    print(sele())
+    print(spider_paocao_cookie())

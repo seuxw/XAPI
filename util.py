@@ -38,5 +38,4 @@ def fun_choose(opts_list):
 
 if __name__ == "__main__":
     opts_list = getopt.getopt(sys.argv[1:], "f:", ["fun="])
-    print(opts_list)
     fun_choose(opts_list)

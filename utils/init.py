@@ -4,6 +4,7 @@
 
 
 import configparser
+import getpass
 
 
 def default_input(content, default):
@@ -20,19 +21,19 @@ def create_auth_cfg():
 
     header = default_input(
         "? Authorization header (Authorization)", "Authorization")
-    conf.set('AUTH_CFG', 'AUTHORIZATION_HEADER', header)
+    conf.set('AUTH_CFG', 'authorization_header', header)
 
     method = default_input("? Authorization method (Bearer)", "Bearer")
-    conf.set('AUTH_CFG', 'AUTHORIZATION_METHOD', method)
+    conf.set('AUTH_CFG', 'authorization_method', method)
 
     algorithms = default_input("? Algorithms (HS256)", "HS256")
-    conf.set('AUTH_CFG', 'ALGORITHMS', algorithms)
+    conf.set('AUTH_CFG', 'algorithms', algorithms)
 
-    key = input("? Secret key: ")
-    conf.set('AUTH_CFG', 'SECRET_KEY', key)
+    key = getpass.getpass("* Secret key: ")
+    conf.set('AUTH_CFG', 'secret_key', key)
 
     client = input("? Client id: ")
-    conf.set('AUTH_CFG', 'CLIENT_ID', client)
+    conf.set('AUTH_CFG', 'client_id', client)
 
     conf.write(open(CONFIG_FILE, 'w'))
     print("Finish create auth config file\n")
@@ -54,7 +55,7 @@ def create_database_cfg():
     user = default_input("? User (root)", "root")
     conf.set('DATABASE_INFO', 'user', user)
 
-    passwd = input("? Password: ")
+    passwd = getpass.getpass("* Password: ")
     conf.set('DATABASE_INFO', 'passwd', passwd)
 
     db = input("? Database: ")
@@ -78,6 +79,24 @@ def create_database_cfg():
     print("Finish create database config file\n")
 
 
+def create_paocao_cfg():
+    """创建 auth 配置文件."""
+    print("\nStart create spider paocao config file")
+    CONFIG_FILE = "./utils/spider_paocao_cookie/paocao.cfg"
+    conf = configparser.ConfigParser()
+    conf.add_section('CARD_INFO')
+
+    cardno = input("? 一卡通号: ")
+    conf.set('CARD_INFO', 'CARDNO', cardno)
+
+    cardpswd = getpass.getpass("* 一卡通密码: ")
+    conf.set('CARD_INFO', 'CARDPSWD', cardpswd)
+
+    conf.write(open(CONFIG_FILE, 'w'))
+    print("Finish create spider paocao config file\n")
+
+
 def init():
     create_auth_cfg()
-    create_database_cfg()
+    # create_database_cfg()
+    # create_paocao_cfg()

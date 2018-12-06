@@ -6,6 +6,7 @@ import jwt
 
 from utils.utilconst.user import ENUM_DIC_USER_TYPE
 
+
 class JwtAuth(object):
     """JWT 身份验证类."""
 
@@ -34,11 +35,11 @@ class JwtAuth(object):
         """身份验证类配置."""
         conf = configparser.ConfigParser()
         conf.read("./auth/auth.cfg")
-        self.AUTHORIZATION_HEADER = conf["AUTH_CFG"]["AUTHORIZATION_HEADER"]
-        self.AUTHORIZATION_METHOD = conf["AUTH_CFG"]["AUTHORIZATION_METHOD"]
-        self.SECRET_KEY = conf["AUTH_CFG"]["SECRET_KEY"]
-        self.ALGORITHMS = conf["AUTH_CFG"]["ALGORITHMS"]
-        self.CLIENT_ID = conf["AUTH_CFG"]["CLIENT_ID"]
+        self.AUTHORIZATION_HEADER = conf["AUTH_CFG"]["authorization_header"]
+        self.AUTHORIZATION_METHOD = conf["AUTH_CFG"]["authorization_method"]
+        self.SECRET_KEY = conf["AUTH_CFG"]["algorithms"]
+        self.ALGORITHMS = conf["AUTH_CFG"]["secret_key"]
+        self.CLIENT_ID = conf["AUTH_CFG"]["client_id"]
 
         self.common = self._jwt(ENUM_DIC_USER_TYPE["common"])
         self.vip = self._jwt(ENUM_DIC_USER_TYPE["vip"])

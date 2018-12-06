@@ -5,7 +5,7 @@ import logging
 import os
 import time
 
-from PIL import Image
+from PIL import Image, ImageFilter
 import pytesseract
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -47,17 +47,11 @@ def sele():
         # TODO： Fix
         im = Image.open('utils/spider_paocao_cookie/screen.png')
         im = im.crop((left, top, right, bottom))
-        bg = Image.new("RGBA", im.size, "white")
-        merged_pic = Image.new("RGBA", tuple(
-            [int(s*1.2) for s in im.size]), "white")
-        mg = Image.alpha_composite(bg, im)
-        merged_pic.paste(mg)
+        w, h = im.size
+        im = im.resize((w*3, h*3))
+        im.save('utils/spider_paocao_cookie/screen1.png')
 
-        # 加入下面一行代码，你可以选择不加入tesseract到你的PATH中
-        # pytesseract.pytesseract.tesseract_cmd = '<full_path_to_your_tesseract_executable>'
-        # 示例：pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract'
-
-        code = pytesseract.image_to_string(merged_pic)
+        code = pytesseract.image_to_string(im)
         print(code)
 
         im.close()

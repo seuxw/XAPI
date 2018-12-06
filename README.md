@@ -33,6 +33,8 @@ pip3 install tornado
 pip3 install pyjwt
 pip3 install pymysql
 pip3 install tormysql
+pip3 install Pillow
+pip3 install pytesseract
 ```
 
 _开发环境： Ubuntu 18.04 LTS_

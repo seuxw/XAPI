@@ -42,12 +42,16 @@ _Mysql: 8.0_
 
 ### 初始化
 
-- 请运行 `util.py` 中的 `init` 函数
-
-- 或在控制台执行以下代码启动模块
+- 在控制台执行以下代码进行初始化
 
   ```bash
-  python3 .\util.py
+  python3 .\util.py -f init
+  ```
+
+  或
+
+  ```bash
+  python3 .\util.py --fun=INI
   ```
 
 ### 运行
@@ -73,6 +77,29 @@ _Mysql: 8.0_
   - 每个 access_token 有效期为 6 个月，超时需重新申请。如需修改过期时间请修改 `/auth/auth_handler.cfg` 文件
 
   - jwt 身份验证在 `/auth/auth.cfg` 文件中实现
+
+### 工具
+
+- 提供的工具可以通过 `util.py` 辅以参数 `-f` 或 `--fun` 进行调用
+
+- 可供选择的选项为：
+
+  | 工具名               | 工具名缩写 | 工具说明                |
+  | -------------------- | ---------- | ----------------------- |
+  | init                 | INI        | 项目 config 文件初始化  |
+  | privilege_escalation | PE         | 用户 xAuth 手动提权工具 |
+
+- 示例：
+  
+  ```bash
+  python3 .\util.py -f INI
+  ```
+
+  注：工具名和缩写名是完全等效的，即上语句也可写成
+
+  ```bash
+  python3 .\util.py --fun=init
+  ```
 
 ### [XAPI 文档](doc/XAPI.md)
 

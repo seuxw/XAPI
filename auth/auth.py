@@ -37,8 +37,8 @@ class JwtAuth(object):
         conf.read("./auth/auth.cfg")
         self.AUTHORIZATION_HEADER = conf["AUTH_CFG"]["authorization_header"]
         self.AUTHORIZATION_METHOD = conf["AUTH_CFG"]["authorization_method"]
-        self.SECRET_KEY = conf["AUTH_CFG"]["algorithms"]
-        self.ALGORITHMS = conf["AUTH_CFG"]["secret_key"]
+        self.SECRET_KEY = conf["AUTH_CFG"]["secret_key"]
+        self.ALGORITHMS = conf["AUTH_CFG"]["algorithms"]
         self.CLIENT_ID = conf["AUTH_CFG"]["client_id"]
 
         self.common = self._jwt(ENUM_DIC_USER_TYPE["common"])

@@ -45,7 +45,7 @@ class BaseHandler(tornado.web.RequestHandler):
     def get_argument_cardno(self, default=0):
         """获取cardno参数，并校验."""
         cardno = self.get_argument_t('cardno', default, int)
-        if not cardno or cardno < 213000000 or cardno > 213359999:
+        if not cardno or cardno < 213120000 or cardno > 213259999:
             return self.write_error(4001)
         return cardno
 

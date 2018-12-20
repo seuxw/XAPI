@@ -10,7 +10,7 @@ class BaseHandler(tornado.web.RequestHandler):
     """所有Handler基类.
 
     重载了输出方法，
-    正确输出(200)使用write_rsp方法，错误输出使用write_error方法
+    正确输出 (200) 使用 write_json_f 方法，错误输出使用 write_error_f 方法
     """
 
     # 输出模板
